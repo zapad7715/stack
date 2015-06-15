@@ -33,7 +33,7 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 # gem 'capistrano-rails', group: :development
 
 group :test do
-  #gem 'shoulda-matchers'
+  gem 'shoulda-matchers'
 end
 
 group :development, :test do
