@@ -1,7 +1,6 @@
 require 'rails_helper'
 
 RSpec.describe QuestionsController do
-  let(:user) { create(:user) }
   let(:question) { create(:question) }
   describe 'GET #index' do
     let(:questions) { create_list(:question, 2) }
@@ -52,6 +51,10 @@ RSpec.describe QuestionsController do
       it 'saves the new question in the database' do
         expect{ post :create, question: attributes_for(:question) }.to \
           change(Question, :count).by(1)
+      end
+      it 'assign a question to the author' do
+        post :create, question: attributes_for(:question)
+        expect(assigns(:question).user_id).to eq @user.id
       end
       it 'redirects to show view' do
         post :create, question: attributes_for(:question)

@@ -16,6 +16,10 @@ RSpec.describe AnswersController, type: :controller do
         post :create, question_id: question.id, answer: attributes_for(:answer)
         expect(response).to redirect_to question_path(assigns(:question))
       end
+      it 'assign an answer to the author' do
+        post :create, question_id: question.id, answer: attributes_for(:answer)
+        expect(assigns(:answer).user_id).to eq @user.id
+      end
     end
     context 'with invalid parameters' do
       it 'does not save the answer in the database' do
@@ -33,11 +37,13 @@ RSpec.describe AnswersController, type: :controller do
     context 'Author delete answer' do
       it 'author tries to delete answer' do
         sign_in(author)
-        expect{ delete :destroy, id: answer_of_author }.to change(answer_of_author.question.answers, :count).by(-1)
+        answer_of_author
+        expect{ delete :destroy, id: answer_of_author }.to change(Answer, :count).by(-1)
       end
 
       it 'redirect to question path' do
         sign_in(author)
+        answer_of_author   
         delete :destroy, id: answer_of_author 
         expect(response).to redirect_to question_path(answer_of_author.question_id) 
       end
@@ -46,7 +52,8 @@ RSpec.describe AnswersController, type: :controller do
     context 'Another user tries delete answer' do
       it 'not the author tries delete answer' do
         sign_in(another_user)
-        expect{ delete :destroy, id: answer_of_author }.to_not change(answer_of_author.question.answers, :count)
+        answer_of_author
+        expect{ delete :destroy, id: answer_of_author }.to_not change(Answer, :count)
       end
 
       it 'redirect to question path' do
