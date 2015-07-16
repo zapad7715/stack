@@ -24,6 +24,7 @@ RSpec.describe QuestionsController do
   end
   
   describe 'GET #new' do
+    sign_in_user
     before { get :new }
     it 'assigns new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
@@ -34,6 +35,7 @@ RSpec.describe QuestionsController do
   end
   
   describe 'GET #edit' do
+    sign_in_user
     before { get :edit, id: question }
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
@@ -44,10 +46,15 @@ RSpec.describe QuestionsController do
   end
   
   describe 'POST #create' do
+    sign_in_user
     context 'with valid attributes' do
       it 'saves the new question in the database' do
         expect{ post :create, question: attributes_for(:question) }.to \
           change(Question, :count).by(1)
+      end
+      it 'assign a question to the author' do
+        post :create, question: attributes_for(:question)
+        expect(assigns(:question).user_id).to eq @user.id
       end
       it 'redirects to show view' do
         post :create, question: attributes_for(:question)
@@ -67,6 +74,7 @@ RSpec.describe QuestionsController do
   end
   
   describe 'PATCH #update' do
+    sign_in_user
     context 'valid attributes' do
       it 'assigns the requested question to @question' do
         patch :update, id: question, question: attributes_for(:question)
@@ -87,8 +95,8 @@ RSpec.describe QuestionsController do
       before { patch :update, id: question, question: {title: 'new title', body: nil} }
       it 'does not changes question attributes' do
         question.reload
-        expect(question.title).to eq 'MyString'
-        expect(question.body).to eq 'MyText'
+        expect(question.title).to have_content "My string"
+        expect(question.body).to have_content "My body"
       end
       it 're-renders edit view' do
          expect(response).to render_template :edit
@@ -97,11 +105,14 @@ RSpec.describe QuestionsController do
   end
   
   describe 'DELETE #destroy' do
-    before { question }
-    it 'deletes question' do
-      expect{ delete :destroy, id: question }.to change(Question, :count).by(-1)      
+    let(:first_user) { create(:user) }
+    let!(:question) { create(:question, user: first_user) }
+    it 'Registered user is owner of question' do
+      sign_in(first_user)
+      expect{ delete :destroy, id: question }.to change(Question, :count).by(-1)
     end
     it 'redirects to index view' do
+      sign_in(first_user)
       delete :destroy, id: question
       expect(response).to redirect_to questions_path
     end
