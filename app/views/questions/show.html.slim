@@ -4,9 +4,11 @@ p = link_to 'Delete question', @question, method: :delete \
   if @question.user == current_user
 hr
 
-h3 #{@question.answers.count} Answers
+#count
+ = render 'answers/count'
+ 
 .answers
-  = render 'answers'
+  = render 'answers' 
 hr
 		
 = form_for [@question, @question.answers.new], method: :post, remote: true do |f|
