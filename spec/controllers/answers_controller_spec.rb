@@ -9,26 +9,26 @@ RSpec.describe AnswersController, type: :controller do
     sign_in_user
     context 'with valid parameters' do
       it 'saves the new answer in the database' do
-        expect { post :create, question_id: question.id, answer: attributes_for(:answer) }.to \
+        expect { post :create, question_id: question.id, answer: attributes_for(:answer), format: :js }.to \
         change(question.answers, :count).by(1)
       end
-      it 'redirects to question\'s show view' do
-        post :create, question_id: question.id, answer: attributes_for(:answer)
-        expect(response).to redirect_to question_path(assigns(:question))
+      it 'render create template' do
+        post :create, question_id: question.id, answer: attributes_for(:answer), format: :js
+        expect(response).to render_template :create
       end
       it 'assign an answer to the author' do
-        post :create, question_id: question.id, answer: attributes_for(:answer)
+        post :create, question_id: question.id, answer: attributes_for(:answer), format: :js
         expect(assigns(:answer).user_id).to eq @user.id
       end
     end
     context 'with invalid parameters' do
       it 'does not save the answer in the database' do
-        expect { post :create, question_id: question.id, answer: attributes_for(:invalid_answer) }.to_not \
+        expect { post :create, question_id: question.id, answer: attributes_for(:invalid_answer), format: :js }.to_not \
         change(Answer, :count)
       end
-      it 're-renders question\'s show view' do
-        post :create, question_id: question.id, answer: attributes_for(:invalid_answer)
-        expect(response).to render_template 'questions/show'
+      it 're-render create template' do
+        post :create, question_id: question.id, answer: attributes_for(:invalid_answer), format: :js
+        expect(response).to render_template :create
       end
     end
   end

@@ -27,6 +27,8 @@ group :development, :test do
   gem 'factory_girl_rails'
   gem 'web-console', '~> 2.0'
   gem 'spring'
+  gem 'selenium-webdriver'
+  gem 'database_cleaner'
 end
 
 group :test do
