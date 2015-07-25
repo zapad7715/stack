@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative "acceptance_helper"
 
 feature 'Registered user is able to log out', %q{
   In order to be able to lieve to community

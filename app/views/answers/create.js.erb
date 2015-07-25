@@ -1,3 +1,10 @@
-$('.answers').append('<%= j render @answer %>');
-$('#answer_body').val('');
-$('#count').html('<%= j render 'answers/count' %>');
+<% if @answer.errors.present? %>
+  <% @answer.errors.full_messages.each do |message| %>
+	  $('.answer-create-errors').append('<%= j message %> </br>');
+	<% end %>
+<% else %>
+  $('.notice').html('<%= j flash[:notice]%>')
+  $('.answers').append('<%= j render @answer %>');
+  $('#answer_body').val('');
+  $('#count').html('<%= j render 'answers/count' %>');
+<% end %>

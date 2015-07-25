@@ -74,32 +74,34 @@ RSpec.describe QuestionsController do
   end
   
   describe 'PATCH #update' do
-    sign_in_user
+    let!(:author) { create(:user) }
+    let!(:question) { create(:question, user: author) }
+    before { sign_in author }
     context 'valid attributes' do
       it 'assigns the requested question to @question' do
-        patch :update, id: question, question: attributes_for(:question)
+        patch :update, id: question, question: attributes_for(:question), format: :js
         expect(assigns(:question)).to eq question
       end
       it 'changes question attributes' do
-        patch :update, id: question, question: {title: 'new title', body: 'new body'}
+        patch :update, id: question, question: { title: 'new title', body: 'new body' }, format: :js
         question.reload
         expect(question.title).to eq 'new title'
         expect(question.body).to eq 'new body'
       end
-      it 'redirects to updated question' do
-        patch :update, id: question, question: attributes_for(:question)
-        expect(response).to redirect_to question
+      it 'render template update' do
+        patch :update, id: question, question: attributes_for(:question), format: :js
+        expect(response).to render_template :update
       end
     end
     context 'invalid attributes' do
-      before { patch :update, id: question, question: {title: 'new title', body: nil} }
+      before { patch :update, id: question, question: {title: 'new title', body: nil}, format: :js }
       it 'does not changes question attributes' do
         question.reload
         expect(question.title).to have_content "My string"
         expect(question.body).to have_content "My body"
       end
-      it 're-renders edit view' do
-         expect(response).to render_template :edit
+      it 'renders edit view' do
+         expect(response).to render_template :update
       end
     end
   end

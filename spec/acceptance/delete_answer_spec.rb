@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative "acceptance_helper"
 
 feature 'Registered user deletes answer', %q{
   Author can delete his own answers

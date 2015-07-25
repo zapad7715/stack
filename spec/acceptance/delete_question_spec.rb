@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative "acceptance_helper"
 
 feature 'Registered user can delete questions', %q{
   In order to delete question
