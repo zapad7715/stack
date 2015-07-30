@@ -64,14 +64,14 @@ RSpec.describe AnswersController, type: :controller do
       it 'author tries to delete answer' do
         sign_in(author)
         answer_of_author
-        expect{ delete :destroy, id: answer_of_author }.to change(Answer, :count).by(-1)
+        expect{ delete :destroy, id: answer_of_author, format: :js }.to change(answer_of_author.question.answers, :count).by(-1)
       end
 
-      it 'redirect to question path' do
+      it 'render template destroy' do
         sign_in(author)
         answer_of_author   
-        delete :destroy, id: answer_of_author 
-        expect(response).to redirect_to question_path(answer_of_author.question_id) 
+        delete :destroy, id: answer_of_author, format: :js 
+        expect(response).to render_template :destroy 
       end
     end
    
@@ -79,13 +79,7 @@ RSpec.describe AnswersController, type: :controller do
       it 'not the author tries delete answer' do
         sign_in(another_user)
         answer_of_author
-        expect{ delete :destroy, id: answer_of_author }.to_not change(Answer, :count)
-      end
-
-      it 'redirect to question path' do
-        sign_in(another_user)
-        delete :destroy, id: answer_of_author 
-        expect(response).to redirect_to question_path(answer_of_author.question_id) 
+        expect{ delete :destroy, id: answer_of_author, format: :js }.to_not change(answer_of_author.question.answers, :count)
       end
     end
   end

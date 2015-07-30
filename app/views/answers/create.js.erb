@@ -5,6 +5,5 @@
 <% else %>
   $('.notice').html('<%= j flash[:notice]%>')
   $('.answers').append('<%= j render @answer %>');
-  $('#answer_body').val('');
   $('#count').html('<%= j render 'answers/count' %>');
 <% end %>

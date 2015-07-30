@@ -16,26 +16,28 @@ class AnswersController < ApplicationController
   def update
     if current_user.id == @answer.user_id
       @question = @answer.question
-      @answer.update(answer_params)
-      flash[:notice] = 'Your answer successfully updated.' 
+      flash[:notice] = 'Your answer successfully updated.' if @answer.update(answer_params)
     else
       flash[:notice] = 'Can not update answer.'
     end
   end
   
   def destroy
-    if current_user.id == @answer.user_id
-      @answer.destroy
-      flash[:notice] = 'Your answer successfully deleted.'
+    if @answer.user_id == current_user.id
+      @question = @answer.question
+      flash[:notice] = 'Your answer successfully deleted.' if @answer.destroy
+    else
+      flash[:notice] = 'Can not delete the answer.'
     end
-      redirect_to question_path @answer.question
   end
 
 
   private
+  
   def load_answer
     @answer = Answer.find(params[:id])
   end
+  
   def load_question
     @question = Question.find(params[:question_id])
   end
