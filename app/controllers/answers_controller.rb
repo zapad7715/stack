@@ -1,7 +1,7 @@
 class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question, only: [ :create ]
-  before_action :load_answer, only: [ :update, :destroy ]
+  before_action :load_answer, only: [ :update, :destroy, :best ]
   
   def create
     @answer = @question.answers.new(answer_params)
@@ -10,6 +10,14 @@ class AnswersController < ApplicationController
       flash[:notice] = 'Your answer successfully created.'
     else
       flash[:notice] = 'Can not create answer.'
+    end
+  end
+  
+  def best
+    if @answer.question.user_id == current_user.id
+      @question = @answer.question
+      @answer.best_answer
+      flash[:notice] = 'Best answer has been choosen'
     end
   end
   

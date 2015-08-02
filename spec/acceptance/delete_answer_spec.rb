@@ -17,6 +17,9 @@ feature 'Registered user deletes answer', %q{
     
     expect(page).to have_content 'Your answer successfully deleted.'
     expect(page).to_not have_content answer.body
+    within '#count' do
+      expect(page).to have_content '0 Answer(s)'
+    end
   end
 
   scenario 'Registered user tries to delete an answer of another user', js: true do

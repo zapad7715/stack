@@ -22,6 +22,9 @@ feature 'Create answer to question', %q{
       within '.answers' do
         expect(page).to have_content(answer.body)
       end
+      within '#count' do
+        expect(page).to have_content '1 Answer(s)'
+      end
       expect(page).to have_content "Your answer successfully created."
     end
   

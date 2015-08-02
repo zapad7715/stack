@@ -59,6 +59,35 @@ RSpec.describe AnswersController, type: :controller do
     end
   end
   
+  describe 'POST #best' do
+    let!(:question) { create(:question, user: author) }
+    let!(:answer) { create(:answer, question: question) }    
+    context "Author of question select best answer" do
+      before do
+        sign_in(author)
+        post :best, question_id: question, id: answer, format: :js
+      end
+      
+      it "answer is marked as best answer" do
+        expect(answer.reload.best).to be true
+      end
+      it 'renders template for best answer' do
+        expect(response).to render_template :best
+      end
+    end
+
+    context "non-onwer select best answer" do
+      before do
+        sign_in(another_user)
+        post :best, question_id: question, id: answer, format: :js
+      end
+
+      it "answer is not marked as best answer" do
+        expect(answer.reload.best).to be false
+      end
+    end
+  end
+  
   describe 'DELETE #destroy' do
     context 'Author delete answer' do
       it 'author tries to delete answer' do

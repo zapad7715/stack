@@ -1,3 +1,4 @@
+= link_to 'All questions', questions_path
 .question
   = render @question
 hr
@@ -6,8 +7,7 @@ hr
  = render 'answers/count'
  
 .answers
-  = render @question.answers 
-hr
+  = render @question.answers
 		
 h3 Add answer
 = form_for [@question, @question.answers.new], method: :post, remote: true do |f|
