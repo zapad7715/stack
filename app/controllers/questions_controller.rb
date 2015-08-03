@@ -28,10 +28,11 @@ class QuestionsController < ApplicationController
   end
   
   def update
-    if @question.update(question_params)
-      redirect_to @question
+    if current_user.id == @question.user_id
+      @question.update(question_params)
+      flash[:notice] = 'Your question successfully updated.'
     else
-      render :edit
+      flash[:notice] = 'Can not update question.'
     end
   end
   

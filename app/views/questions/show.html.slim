@@ -1,18 +1,18 @@
-h3 = @question.title
-p = @question.body
-p = link_to 'Delete question', @question, method: :delete \
-  if @question.user == current_user
+= link_to 'All questions', questions_path
+.question
+  = render @question
 hr
 
 #count
  = render 'answers/count'
  
 .answers
-  = render 'answers' 
-hr
+  = render @question.answers
 		
+h3 Add answer
 = form_for [@question, @question.answers.new], method: :post, remote: true do |f|
-  h3 Add answer
-  = f.label :body, "Your answer the question" 
-  = f.text_area :body 
-  = f.submit 'Create answer'
+  p
+		= f.label :body, "Your answer the question" 
+		.answer-create-errors 
+		= f.text_area :body  
+  p= f.submit 'Create answer' 

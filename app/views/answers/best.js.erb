@@ -1,10 +1,10 @@
 <% if @answer.errors.present? %>
   <% @answer.errors.full_messages.each do |message| %>
-	  $('.answer-create-errors').append('<%= j message %> </br>');
+	  $('.answer-edit-errors').append('<%= j message %> </br>');
 	<% end %>
 <% else %>
   $('.notice').html('<%= j flash[:notice]%>')
-  $('.answers').append('<%= j render @answer %>');
+  $('.answers').html('<%= j render @answer.question.answers %>');
   $('#count').html('<%= j render 'answers/count' %>');
 	$('.edit-answer-link').click(function(e) {
 		e.preventDefault();

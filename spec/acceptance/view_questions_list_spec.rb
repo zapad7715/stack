@@ -1,4 +1,4 @@
-require 'rails_helper'
+require_relative "acceptance_helper"
 
 feature 'All users can view the questions' do
 

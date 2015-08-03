@@ -1,4 +1,19 @@
 - if answer.persisted?
-  p = answer.body
-  p = link_to 'Delete my answer', answer_path(answer), method: 'delete' if answer.user == current_user
-	
+  div id="answer-#{answer.id}"
+    - if answer.best
+      h4 = 'Best answer:'
+      p = answer.body
+    - else
+      p = answer.body
+      = link_to ' Mark as best ', best_answer_path(answer), method: :post, remote: true if @question.user == current_user
+			
+    - if user_signed_in? && answer.user == current_user
+      = link_to ' Edit my answer ', '', class: 'edit-answer-link', data: { answer_id: answer.id }
+      = link_to ' Delete my answer ', answer_path(answer), method: 'delete', remote: true
+	hr
+      p
+        = form_for [answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
+          = f.label :body, 'Edit your answer'
+          .answer-edit-errors
+          = f.text_area :body
+          = f.submit 'Save'
