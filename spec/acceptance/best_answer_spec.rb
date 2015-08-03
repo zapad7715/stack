@@ -29,6 +29,13 @@ feature 'Best answer', %q{
           expect(page).to have_content best_answer.body
         end
       end
+      scenario "sees sorted answers", js: true do
+        within '.answers' do
+          answers_on_page = page.all('div')
+          expect(answers_on_page[0]).to have_content best_answer.body
+          expect(answers_on_page[1]).to have_content answer.body
+        end
+      end
     end
     
     context 'as author' do
@@ -54,6 +61,25 @@ feature 'Best answer', %q{
          
          expect(page).to have_content 'Best answer:'
          expect(page).to have_content answer.body
+        end
+      end
+      
+      scenario "sees sorted answers", js: true do
+        within '.answers' do
+          answers_on_page = page.all('div')
+          expect(answers_on_page[0]).to have_content best_answer.body
+          expect(answers_on_page[1]).to have_content answer.body
+        end
+        within "#answer-#{answer.id}" do
+         click_on('Mark as best')
+         
+         expect(page).to have_content 'Best answer:'
+         expect(page).to have_content answer.body
+        end
+        within '.answers' do
+          answers_on_page = page.all('div')
+          expect(answers_on_page[0]).to have_content answer.body
+          expect(answers_on_page[1]).to have_content best_answer.body
         end
       end
       
@@ -94,6 +120,13 @@ feature 'Best answer', %q{
         expect(page).to_not have_link 'Mark as best'
         expect(page).to have_content 'Best answer:'
         expect(page).to have_content best_answer.body
+      end
+    end
+    scenario "sees sorted answers", js: true do
+      within '.answers' do
+        answers_on_page = page.all('div')
+        expect(answers_on_page[0]).to have_content best_answer.body
+        expect(answers_on_page[1]).to have_content answer.body
       end
     end    
   end

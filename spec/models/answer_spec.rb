@@ -22,6 +22,7 @@ RSpec.describe Answer, type: :model do
   describe 'method best_answer' do
    it 'marks answer as best' do
      answer.best_answer
+     answer.reload
 
      expect(answer.best).to be true
     end
