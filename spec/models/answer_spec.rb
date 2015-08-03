@@ -28,10 +28,12 @@ RSpec.describe Answer, type: :model do
     end
     it 'marks another answer as best if best answer already exists' do
       answer.update!(best: true)
-
-      another_answer.best_answer
       answer.reload
 
+      another_answer.best_answer
+      another_answer.reload
+      answer.reload
+      
       expect(another_answer.best).to be true
       expect(answer.best).to be false
 
