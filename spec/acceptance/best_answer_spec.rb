@@ -31,9 +31,9 @@ feature 'Best answer', %q{
       end
       scenario "sees sorted answers", js: true do
         within '.answers' do
-          answers_on_page = page.all('div')
-          expect(answers_on_page[0]).to have_content best_answer.body
-          expect(answers_on_page[1]).to have_content answer.body
+          expect(find('div:first-child')).to have_content 'Best answer:'
+          expect(find('div:first-child')).to have_content best_answer.body
+          expect(find('div:nth-child(1)')).to have_content answer.body
         end
       end
     end
@@ -66,43 +66,54 @@ feature 'Best answer', %q{
       
       scenario "sees sorted answers", js: true do
         within '.answers' do
-          answers_on_page = page.all('div')
-          expect(answers_on_page[0]).to have_content best_answer.body
-          expect(answers_on_page[1]).to have_content answer.body
-        end
-        within "#answer-#{answer.id}" do
-         click_on('Mark as best')
-         
-         expect(page).to have_content 'Best answer:'
-         expect(page).to have_content answer.body
-        end
-        within '.answers' do
-          answers_on_page = page.all('div')
-          expect(answers_on_page[0]).to have_content answer.body
-          expect(answers_on_page[1]).to have_content best_answer.body
+          expect(find('div:first-child')).to have_content 'Best answer:'
+          expect(find('div:first-child')).to have_content best_answer.body
+          expect(find('div:nth-child(1)')).to have_content answer.body
+
+          within "#answer-#{answer.id}" do
+            click_on('Mark as best')
+
+            expect(page).to have_content 'Best answer:'
+            expect(page).to have_content answer.body
+          end
+          
+          expect(find('div:first-child')).to have_content 'Best answer:'
+          expect(find('div:first-child')).to have_content answer.body
+          expect(find('div:nth-child(1)')).to have_content best_answer.body
         end
       end
       
       scenario "marks only one best answer", js: true do
-        within "#answer-#{answer.id}" do
-          expect(page).to have_link 'Mark as best'
-        end
-        within "#answer-#{best_answer.id}" do
-          expect(page).to have_content 'Best answer:'
-          expect(page).to_not have_link 'Mark as best'
+        within '.answers' do
+          within "#answer-#{answer.id}" do
+            expect(page).to have_link 'Mark as best'
+          end
+          within "#answer-#{best_answer.id}" do
+            expect(page).to have_content 'Best answer:'
+            expect(page).to_not have_link 'Mark as best'
+          end
+          expect(find('div:first-child')).to have_content 'Best answer:'
+          expect(find('div:first-child')).to have_content best_answer.body
+          expect(find('div:nth-child(1)')).to have_content answer.body
         end
         
-        within "#answer-#{answer.id}" do
-          click_on 'Mark as best'
+        
+        within '.answers' do
+          within "#answer-#{answer.id}" do
+            click_on 'Mark as best'
           
-          expect(page).to_not have_link 'Mark as best'
-          expect(page).to have_content 'Best answer:'
-          expect(page).to have_content answer.body
-        end
-        within "#answer-#{best_answer.id}" do
-          expect(page).to have_link 'Mark as best'
-          expect(page).to_not have_content 'Best answer:'
-          expect(page).to have_content best_answer.body
+            expect(page).to_not have_link 'Mark as best'
+            expect(page).to have_content 'Best answer:'
+            expect(page).to have_content answer.body
+          end  
+          within "#answer-#{best_answer.id}" do
+            expect(page).to have_link 'Mark as best'
+            expect(page).to_not have_content 'Best answer:'
+            expect(page).to have_content best_answer.body
+          end
+          expect(find('div:first-child')).to have_content 'Best answer:'
+          expect(find('div:first-child')).to have_content answer.body
+          expect(find('div:nth-child(1)')).to have_content best_answer.body
         end
       end
     end
@@ -124,9 +135,9 @@ feature 'Best answer', %q{
     end
     scenario "sees sorted answers", js: true do
       within '.answers' do
-        answers_on_page = page.all('div')
-        expect(answers_on_page[0]).to have_content best_answer.body
-        expect(answers_on_page[1]).to have_content answer.body
+        expect(find('div:first-child')).to have_content 'Best answer:'
+        expect(find('div:first-child')).to have_content best_answer.body
+        expect(find('div:nth-child(1)')).to have_content answer.body
       end
     end    
   end
