@@ -9,10 +9,15 @@ hr
 .answers
   = render @question.answers
 		
-h3 Add answer
-= form_for [@question, @question.answers.new], method: :post, remote: true do |f|
-  p
-		= f.label :body, "Your answer the question" 
-		.answer-create-errors 
-		= f.text_area :body  
-  p= f.submit 'Create answer' 
+- if user_signed_in?
+  h3 Add answer
+  = form_for [@question, @answer], method: :post, remote: true do |f|
+    p
+      = f.label :body, "Your answer the question" 
+      .answer-create-errors 
+    = f.text_area :body 
+    p
+      = f.fields_for :attachments do |a|
+        p = render partial: 'attachments/a_fields', locals: {f: a}
+        p = link_to_add_association 'Add file', f, :attachments, partial: 'attachments/a_fields'
+    p = f.submit 'Create answer' 

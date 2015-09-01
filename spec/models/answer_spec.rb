@@ -13,18 +13,23 @@ RSpec.describe Answer, type: :model do
   describe 'associations' do
     it { should belong_to(:question) }
     it { should belong_to :user }
+    it { should have_many :attachments }
   end
   
-  let(:question) { create(:question) }
-  let(:answer) { create(:answer, question: question) }
-  let(:another_answer) { create(:answer, question: question) }
-
+  describe 'nested attributes' do
+    it { should accept_nested_attributes_for :attachments }
+  end
+  
+  
   describe 'method best_answer' do
-   it 'marks answer as best' do
-     answer.best_answer
-     answer.reload
+    let(:question) { create(:question) }
+    let(:answer) { create(:answer, question: question) }
+    let(:another_answer) { create(:answer, question: question) }
+    it 'marks answer as best' do
+      answer.best_answer
+      answer.reload
 
-     expect(answer.best).to be true
+      expect(answer.best).to be true
     end
     it 'marks another answer as best if best answer already exists' do
       answer.update!(best: true)

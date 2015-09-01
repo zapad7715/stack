@@ -1,10 +1,15 @@
+= link_to 'All questions', questions_path
 = form_for @question do |f|
     h3 Ask question
-    br
-    = f.label :title
-    = f.text_field :title
-    br
-    = f.label :body
-    = f.text_area :body
-    br
-    = f.submit 'Create'
+    p
+      = f.label :title
+      = f.text_field :title
+    p
+      = f.label :body
+      = f.text_area :body
+    p
+      = f.fields_for :attachments do |a|
+        p = render partial: 'attachments/a_fields', locals: {f: a}
+        p = link_to_add_association 'Add file', f, :attachments, partial: 'attachments/a_fields'
+    p
+      = f.submit 'Create'
