@@ -4,7 +4,7 @@ class AnswersController < ApplicationController
   before_action :load_answer, only: [ :update, :destroy, :best ]
   
   def create
-    @answer = @question.answers.new(answer_params)
+    @answer = @question.answers.build(answer_params)
     @answer.user = current_user
     if @answer.save
       flash[:notice] = 'Your answer successfully created.'
@@ -51,6 +51,6 @@ class AnswersController < ApplicationController
   end
   
   def answer_params
-    params.require(:answer).permit(:body)
+    params.require(:answer).permit(:body, attachments_attributes: [:file,  :id, :_destroy])
   end
 end

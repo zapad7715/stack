@@ -6,7 +6,13 @@
     - else
       p = answer.body
       = link_to ' Mark as best ', best_answer_path(answer), method: :post, remote: true if @question.user == current_user
-			
+    p 
+      ul
+        - answer.attachments.each do |a|
+          li id="answer-attachment-id-#{a.id}"
+            => link_to a.file.filename, a.file.url
+            - if user_signed_in? && current_user.id == answer.user_id
+              = link_to 'Delete file', attachment_path(a), method: :delete, data: {confirm: 'Delete file?'}, remote: true
     - if user_signed_in? && answer.user == current_user
       = link_to ' Edit my answer ', '', class: 'edit-answer-link', data: { answer_id: answer.id }
       = link_to ' Delete my answer ', answer_path(answer), method: 'delete', remote: true
