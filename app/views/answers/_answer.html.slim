@@ -6,7 +6,8 @@
     - else
       p = answer.body
       = link_to ' Mark as best ', best_answer_path(answer), method: :post, remote: true if @question.user == current_user
-    p 
+    = render 'votes/vote', votable: answer, type: "answer"
+    p
       ul
         - answer.attachments.each do |a|
           li id="answer-attachment-id-#{a.id}"

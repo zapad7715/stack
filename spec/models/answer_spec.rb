@@ -13,7 +13,8 @@ RSpec.describe Answer, type: :model do
   describe 'associations' do
     it { should belong_to(:question) }
     it { should belong_to :user }
-    it { should have_many :attachments }
+    it { should have_many(:attachments).dependent(:destroy) }
+    it { should have_many(:votes).dependent(:destroy) }
   end
   
   describe 'nested attributes' do
