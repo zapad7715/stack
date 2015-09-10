@@ -14,8 +14,9 @@ RSpec.describe Question, type: :model do
   
   describe "assotiations" do
     it { should have_many(:answers).dependent(:destroy) }
-    it { should have_many(:attachments) }
+    it { should have_many(:attachments).dependent(:destroy) }
     it { should belong_to(:user) }
+    it { should have_many(:votes).dependent(:destroy) }
   end
   
   describe 'nested attributes' do
