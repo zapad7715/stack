@@ -75,7 +75,7 @@ ActiveRecord::Schema.define(version: 20150909114548) do
     t.datetime "updated_at",   null: false
   end
 
-  add_index "votes", ["votable_id", "votable_type"], name: "index_votes_on_votable_id_and_votable_type", unique: true, using: :btree
+  add_index "votes", ["votable_id", "votable_type"], name: "index_votes_on_votable_id_and_votable_type", using: :btree
 
   add_foreign_key "answers", "questions"
 end

@@ -6,7 +6,7 @@ class CreateVotes < ActiveRecord::Migration
       t.string :votable_type
       t.integer :value
       t.timestamps null: false
-      t.index([:votable_id, :votable_type], unique: true)
+      t.index [:votable_id, :votable_type]
     end
   end
 end
