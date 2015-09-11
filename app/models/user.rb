@@ -1,4 +1,5 @@
 class User < ActiveRecord::Base
+  include Commentable
   include Votable
   
   has_many :questions, dependent: :destroy

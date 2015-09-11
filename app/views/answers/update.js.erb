@@ -3,9 +3,11 @@
 	  $('.answer-edit-errors').append('<%= j message %> </br>');
 	<% end %>
 <% else %>
-  $('.notice').html('<%= j flash[:notice]%>')
-  $('#answer-<%=@answer.id%>').replaceWith('<%= j render @answer %>');
-  $('#count').html('<%= j render 'answers/count' %>');
+  <% publish_to "/questions/#{@question.id}/answers" do%>
+    $('.notice').html('<%= j flash[:notice]%>')
+    $('#answer-<%=@answer.id%>').replaceWith('<%= j render @answer %>');
+    $('#count').html('<%= j render 'answers/count' %>');
+  <% end %>
 	$('.edit-answer-link').click(function(e) {
 		e.preventDefault();
 		$(this).hide();

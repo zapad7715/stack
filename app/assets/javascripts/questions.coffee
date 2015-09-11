@@ -7,3 +7,7 @@ $ ->
     $(this).hide();
     question_id = $(this).data('questionId');
     $('form#edit-question-' + question_id).show()
+    
+  PrivatePub.subscribe '/questions/index', (data, channel) ->
+    question = $.parseJSON(data['question'])
+    $('.questions-list').append('<li><a href="/questions/' + question.id + '">' + question.title + '</a></li>')

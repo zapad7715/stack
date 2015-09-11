@@ -8,10 +8,14 @@ class AnswersController < ApplicationController
   def create
     @answer = @question.answers.build(answer_params)
     @answer.user = current_user
-    if @answer.save
-      flash[:notice] = 'Your answer successfully created.'
-    else
-      flash[:notice] = 'Can not create answer.'
+    respond_to do |format|
+      if @answer.save
+        format.js
+        flash[:notice] = 'Your answer successfully created.'
+      else
+        flash[:notice] = 'Can not create answer.'
+        format.js
+      end
     end
   end
   
@@ -24,20 +28,28 @@ class AnswersController < ApplicationController
   end
   
   def update
-    if current_user.id == @answer.user_id
-      @question = @answer.question
-      flash[:notice] = 'Your answer successfully updated.' if @answer.update(answer_params)
-    else
-      flash[:notice] = 'Can not update answer.'
+    respond_to do |format|
+      if current_user.id == @answer.user_id
+        @question = @answer.question
+        flash[:notice] = 'Your answer successfully updated.' if @answer.update(answer_params)
+        format.js
+      else
+        flash[:notice] = 'Can not update answer.'
+        format.js
+      end
     end
   end
   
   def destroy
-    if @answer.user_id == current_user.id
-      @question = @answer.question
-      flash[:notice] = 'Your answer successfully deleted.' if @answer.destroy
-    else
-      flash[:notice] = 'Can not delete the answer.'
+    respond_to do |format|
+      if @answer.user_id == current_user.id
+        @question = @answer.question
+        flash[:notice] = 'Your answer successfully deleted.' if @answer.destroy
+        format.js
+      else
+        flash[:notice] = 'Can not delete the answer.'
+        format.js
+      end
     end
   end
 

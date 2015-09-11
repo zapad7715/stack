@@ -1,5 +1,6 @@
 class Question < ActiveRecord::Base
   include Attachable
+  include Commentable
   include Votable
   
   belongs_to :user
