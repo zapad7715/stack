@@ -4,8 +4,24 @@
 	<% end %>
 <% else %>
   $('.notice').html('<%= j flash[:notice]%>')
-  $('.answers').append('<%= j render @answer %>');
-  $('#count').html('<%= j render 'answers/count' %>');
+  $('.new_answer #answer_body').val('');
+  <% publish_to "/questions/#{@question.id}/answers" do%>
+    current_user = $("#user_id").data('user-id');
+    $('.answers').append('<%= j render @answer %>');
+    $('#count').html('<%= j render 'answers/count' %>');
+    if (current_user != <%= @answer.user_id %>) {
+      $("#answer-<%= @answer.id %> .edit-answer-link").remove();
+      $("#answer-<%= @answer.id %> .delete-answer-link").remove();
+      $("#answer-<%= @answer.id %> .mark-best-answer").hide();
+      if (current_user) {
+        $("#answer-<%= @answer.id %> .plus").show();
+        $("#answer-<%= @answer.id %> .minus").show();
+      }
+    }
+    if (current_user == <%= @question.user_id %>) {
+      $("#answer-<%= @answer.id %> .mark-best-answer").show();
+    }
+  <% end %>
 	$('.edit-answer-link').click(function(e) {
 		e.preventDefault();
 		$(this).hide();

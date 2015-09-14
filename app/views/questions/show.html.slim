@@ -1,7 +1,6 @@
 = link_to 'All questions', questions_path
 
-.question
-  = render @question
+= render @question
 hr
 
 #count
@@ -21,4 +20,7 @@ hr
       = f.fields_for :attachments do |a|
         p = render partial: 'attachments/a_fields', locals: {f: a}
         p = link_to_add_association 'Add file', f, :attachments, partial: 'attachments/a_fields'
-    p = f.submit 'Create answer' 
+    p = f.submit 'Create answer'
+
+= subscribe_to "/questions/#{@question.id}/answers"
+= subscribe_to "/questions/#{@question.id}/comments"

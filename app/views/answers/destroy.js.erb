@@ -1,3 +1,5 @@
-$('.notice').html('<%= j flash[:notice]%>')
-$("#answer-<%= @answer.id %>").remove();
-$('#count').html('<%= j render 'answers/count' %>');
+<% publish_to "/questions/#{@question.id}/answers" do%>
+  $('.notice').html('<%= j flash[:notice]%>')
+  $("#answer-<%= @answer.id %>").remove();
+  $('#count').html('<%= j render 'answers/count' %>');
+<% end %>

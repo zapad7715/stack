@@ -12,6 +12,7 @@
 
 <div>
   <%- if user_signed_in? %>
+    <span id="user_id" data-user-id="<%= current_user.id %>"></span>
     <ul>
       <li>
         <%= link_to('Logout', destroy_user_session_path, method: :delete) %>

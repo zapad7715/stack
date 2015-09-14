@@ -5,7 +5,7 @@
       p = answer.body
     - else
       p = answer.body
-      = link_to ' Mark as best ', best_answer_path(answer), method: :post, remote: true if @question.user == current_user
+      = link_to ' Mark as best ', best_answer_path(answer), method: :post, class: 'mark-best-answer', remote: true if @question.user == current_user
     = render 'votes/vote', votable: answer, type: "answer"
     p
       ul
@@ -14,9 +14,20 @@
             => link_to a.file.filename, a.file.url
             - if user_signed_in? && current_user.id == answer.user_id
               = link_to 'Delete file', attachment_path(a), method: :delete, data: {confirm: 'Delete file?'}, remote: true
+    - if user_signed_in?
+      .comments
+        h4 Comments:
+        - answer.comments.each do |c|
+          = render partial: 'comments/comment', locals: {comment: c}
+        = link_to 'Add comment', '', class: 'create-comment-link', data: {commentable_id: answer.id}
+        = form_for [answer, answer.comments.build], method: "post", remote: true, html: {id: "create-comment-#{answer.id}"} do |f|
+          = f.label :comment_body, "Comment"
+          = f.text_area :comment_body
+          = f.submit 'Create'
+          .comment-errors
     - if user_signed_in? && answer.user == current_user
       = link_to ' Edit my answer ', '', class: 'edit-answer-link', data: { answer_id: answer.id }
-      = link_to ' Delete my answer ', answer_path(answer), method: 'delete', remote: true
+      = link_to ' Delete my answer ', answer_path(answer), class: 'delete-answer-link', method: 'delete', remote: true
 	hr
       p
         = form_for [answer], remote: true, html: { id: "edit-answer-#{answer.id}" } do |f|
