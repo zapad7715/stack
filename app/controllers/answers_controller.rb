@@ -2,6 +2,8 @@ class AnswersController < ApplicationController
   before_action :authenticate_user!
   before_action :load_question, only: [ :create ]
   before_action :load_answer, only: [ :update, :destroy, :best ]
+  before_action :access_answer, only: [:update, :destroy ]
+  before_action :access_best_answer, only: [ :best ]
   
   respond_to :js, only: [ :create, :update, :destroy, :best ]
   
@@ -12,16 +14,16 @@ class AnswersController < ApplicationController
   end
   
   def best
-    respond_with(@answer.best_answer) if @answer.question.user_id == current_user.id
+    respond_with(@answer.best_answer)
   end
   
   def update
-    @answer.update(answer_params) if @answer.user_id == current_user.id
+    @answer.update(answer_params)
     respond_with @answer
   end
   
   def destroy
-    respond_with(@answer.destroy) if @answer.user_id == current_user.id
+    respond_with(@answer.destroy)
   end
 
   private
@@ -33,6 +35,14 @@ class AnswersController < ApplicationController
   
   def load_question
     @question = Question.find(params[:question_id])
+  end
+  
+  def access_answer
+    redirect_to @answer.question, notice: 'Access denied' if  @answer.user_id != current_user.id
+  end
+  
+  def access_best_answer
+    redirect_to @answer.question, notice: 'Access denied' if @answer.question.user_id != current_user.id
   end
   
   def answer_params

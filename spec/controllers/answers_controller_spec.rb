@@ -7,7 +7,7 @@ RSpec.describe AnswersController, type: :controller do
   let!(:author) { create(:user) }
   let!(:another_user) { create(:user) }
   let!(:question) { create(:question) }
-  let(:answer_of_author) { create(:answer, user: author) }
+  let(:answer_of_author) { create(:answer, question: question, user: author) }
   describe 'POST #create' do
     sign_in_user
     context 'with valid parameters' do
@@ -37,27 +37,39 @@ RSpec.describe AnswersController, type: :controller do
   end
   
   describe 'PATCH #update' do
-    let(:answer) { create(:answer, question: question, user: author) }
-    before do 
-      sign_in author
-    end
     context 'valid attributes' do
+      before do 
+        sign_in author
+      end
       it 'assigns the requested answer to @answer' do
-        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
-        expect(assigns(:answer)).to eq answer
+        patch :update, id: answer_of_author, question_id: question, answer: attributes_for(:answer), format: :js
+        expect(assigns(:answer)).to eq answer_of_author
       end
       it 'assigns the question' do
-        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        patch :update, id: answer_of_author, question_id: question, answer: attributes_for(:answer), format: :js
         expect(assigns(:question)).to eq question
       end
       it 'changes answer attributes' do
-        patch :update, id: answer, question_id: question, answer: {body: 'new body'}, format: :js
-        answer.reload
-        expect(answer.body).to eq 'new body'
+        patch :update, id: answer_of_author, question_id: question, answer: {body: 'new body'}, format: :js
+        answer_of_author.reload
+        expect(answer_of_author.body).to eq 'new body'
       end
       it 'render update template' do
-        patch :update, id: answer, question_id: question, answer: attributes_for(:answer), format: :js
+        patch :update, id: answer_of_author, question_id: question, answer: attributes_for(:answer), format: :js
         expect(response).to render_template :update
+      end
+    end
+    context 'Non-author of answer' do
+      before do
+        sign_in(another_user)
+        patch :update, id: answer_of_author, question_id: question, answer: {body: 'new body'}, format: :js
+      end
+      it 'tries update answer' do
+        answer_of_author.reload
+        expect(answer_of_author.body).to_not eq 'new body'
+      end
+      it 'redirect to question' do
+        expect(response).to redirect_to(question)
       end
     end
   end
@@ -88,31 +100,41 @@ RSpec.describe AnswersController, type: :controller do
       it "answer is not marked as best answer" do
         expect(answer.reload.best).to be false
       end
+      it 'redirect to question' do
+        expect(response).to redirect_to(question)
+      end
     end
   end
   
   describe 'DELETE #destroy' do
     context 'Author delete answer' do
-      it 'author tries to delete answer' do
+      before do
         sign_in(author)
-        answer_of_author
+        answer_of_author          
+      end
+      it 'author tries to delete answer' do
         expect{ delete :destroy, id: answer_of_author, format: :js }.to change(answer_of_author.question.answers, :count).by(-1)
       end
 
       it 'render template destroy' do
-        sign_in(author)
-        answer_of_author   
         delete :destroy, id: answer_of_author, format: :js 
         expect(response).to render_template :destroy 
       end
     end
    
     context 'Another user tries delete answer' do
-      it 'not the author tries delete answer' do
+      before do
         sign_in(another_user)
-        answer_of_author
+        answer_of_author        
+      end
+      it 'not the author tries delete answer' do
         expect{ delete :destroy, id: answer_of_author, format: :js }.to_not change(answer_of_author.question.answers, :count)
       end
+      it 'redirect to question' do
+        delete :destroy, id: answer_of_author, format: :js 
+        expect(response).to redirect_to(question)
+      end
+      
     end
   end
 end
