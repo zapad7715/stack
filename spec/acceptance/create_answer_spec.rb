@@ -25,7 +25,7 @@ feature 'Create answer to question', %q{
       within '#count' do
         expect(page).to have_content '1 Answer(s)'
       end
-      expect(page).to have_content "Your answer successfully created."
+      expect(page).to have_content "Answer was successfully created."
     end
   
     scenario 'try to create invalid answer', js: true do
