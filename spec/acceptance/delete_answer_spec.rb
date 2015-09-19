@@ -15,7 +15,7 @@ feature 'Registered user deletes answer', %q{
     visit question_path(answer.question)
     click_on 'Delete my answer'
     
-    expect(page).to have_content 'Your answer successfully deleted.'
+    expect(page).to have_content 'Answer was successfully destroyed'
     expect(page).to_not have_content answer.body
     within '#count' do
       expect(page).to have_content '0 Answer(s)'

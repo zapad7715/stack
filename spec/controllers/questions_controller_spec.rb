@@ -21,9 +21,6 @@ RSpec.describe QuestionsController do
     it 'assigns the requested question to @question' do
       expect(assigns(:question)).to eq question
     end
-    it 'builds new attachment for answer' do
-      expect(assigns(:answer).attachments.first).to be_a_new(Attachment)
-    end
     it 'renders show view' do
       expect(response).to render_template :show
     end
@@ -34,9 +31,6 @@ RSpec.describe QuestionsController do
     before { get :new }
     it 'assigns new Question to @question' do
       expect(assigns(:question)).to be_a_new(Question)
-    end
-    it 'builds new attachment for question' do
-      expect(assigns(:question).attachments.first).to be_a_new(Attachment)
     end
     it 'renders new view' do
       expect(response).to render_template :new
@@ -84,9 +78,10 @@ RSpec.describe QuestionsController do
   
   describe 'PATCH #update' do
     let!(:author) { create(:user) }
+    let!(:another_user) { create(:user) }
     let!(:question) { create(:question, user: author) }
-    before { sign_in author }
     context 'valid attributes' do
+      before { sign_in author }
       it 'assigns the requested question to @question' do
         patch :update, id: question, question: attributes_for(:question), format: :js
         expect(assigns(:question)).to eq question
@@ -103,6 +98,7 @@ RSpec.describe QuestionsController do
       end
     end
     context 'invalid attributes' do
+      before { sign_in author }
       before { patch :update, id: question, question: {title: 'new title', body: nil}, format: :js }
       it 'does not changes question attributes' do
         question.reload
@@ -111,6 +107,14 @@ RSpec.describe QuestionsController do
       end
       it 'renders edit view' do
          expect(response).to render_template :update
+      end
+    end
+    context 'Another user' do
+      it 'render status 403' do
+        sign_in another_user
+        patch :update, id: question, question: { title: 'new title', body: 'new body' }, format: :js
+        
+        expect(response.status).to eq(403)
       end
     end
   end

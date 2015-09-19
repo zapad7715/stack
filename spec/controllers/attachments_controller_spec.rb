@@ -5,7 +5,7 @@ RSpec.describe AttachmentsController, type: :controller do
     
     let(:user) {create(:user)}
     let(:question_author) {create(:user)}
-    let(:question) {create(:question, user: question_author)}
+    let!(:question) {create(:question, user: question_author)}
     let!(:question_attach) {create(:attachment, attachable: question)}
     
     let(:answer_author) {create(:user)}
@@ -35,13 +35,22 @@ RSpec.describe AttachmentsController, type: :controller do
     end
 
     context "Non author" do
+      before do
+      sign_in(user)        
+      end
       it "try delete other attach for question" do
-      sign_in(user)
         expect {delete :destroy, id: question_attach, format: :js}.to_not change(Attachment, :count)
       end
       it "try delete other attach for answer" do
-      sign_in(user)
         expect {delete :destroy, id: answer_attach, format: :js}.to_not change(Attachment, :count)
+      end
+      it 'of question, render status 403' do
+        delete :destroy, id: question_attach, format: :js
+        expect(response.status).to eq(403)
+      end
+      it 'of answer, render status 403' do
+        delete :destroy, id: answer_attach, format: :js
+        expect(response.status).to eq(403)
       end
     end
   end
