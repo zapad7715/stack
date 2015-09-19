@@ -78,9 +78,10 @@ RSpec.describe QuestionsController do
   
   describe 'PATCH #update' do
     let!(:author) { create(:user) }
+    let!(:another_user) { create(:user) }
     let!(:question) { create(:question, user: author) }
-    before { sign_in author }
     context 'valid attributes' do
+      before { sign_in author }
       it 'assigns the requested question to @question' do
         patch :update, id: question, question: attributes_for(:question), format: :js
         expect(assigns(:question)).to eq question
@@ -97,6 +98,7 @@ RSpec.describe QuestionsController do
       end
     end
     context 'invalid attributes' do
+      before { sign_in author }
       before { patch :update, id: question, question: {title: 'new title', body: nil}, format: :js }
       it 'does not changes question attributes' do
         question.reload
@@ -105,6 +107,14 @@ RSpec.describe QuestionsController do
       end
       it 'renders edit view' do
          expect(response).to render_template :update
+      end
+    end
+    context 'Another user' do
+      it 'render status 403' do
+        sign_in another_user
+        patch :update, id: question, question: { title: 'new title', body: 'new body' }, format: :js
+        
+        expect(response.status).to eq(403)
       end
     end
   end

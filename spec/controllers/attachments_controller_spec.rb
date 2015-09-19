@@ -44,13 +44,13 @@ RSpec.describe AttachmentsController, type: :controller do
       it "try delete other attach for answer" do
         expect {delete :destroy, id: answer_attach, format: :js}.to_not change(Attachment, :count)
       end
-      it 'of question, redirect to question' do
+      it 'of question, render status 403' do
         delete :destroy, id: question_attach, format: :js
-        expect(response).to redirect_to(question)
+        expect(response.status).to eq(403)
       end
-      it 'of answer, redirect to question' do
+      it 'of answer, render status 403' do
         delete :destroy, id: answer_attach, format: :js
-        expect(response).to redirect_to(question)
+        expect(response.status).to eq(403)
       end
     end
   end

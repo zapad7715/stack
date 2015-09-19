@@ -68,8 +68,8 @@ RSpec.describe AnswersController, type: :controller do
         answer_of_author.reload
         expect(answer_of_author.body).to_not eq 'new body'
       end
-      it 'redirect to question' do
-        expect(response).to redirect_to(question)
+      it 'render status 403' do
+        expect(response.status).to eq(403)
       end
     end
   end
@@ -100,8 +100,8 @@ RSpec.describe AnswersController, type: :controller do
       it "answer is not marked as best answer" do
         expect(answer.reload.best).to be false
       end
-      it 'redirect to question' do
-        expect(response).to redirect_to(question)
+      it 'render status 403' do
+        expect(response.status).to eq(403)
       end
     end
   end
@@ -130,9 +130,9 @@ RSpec.describe AnswersController, type: :controller do
       it 'not the author tries delete answer' do
         expect{ delete :destroy, id: answer_of_author, format: :js }.to_not change(answer_of_author.question.answers, :count)
       end
-      it 'redirect to question' do
+      it 'render status 403' do
         delete :destroy, id: answer_of_author, format: :js 
-        expect(response).to redirect_to(question)
+        expect(response.status).to eq(403)
       end
       
     end

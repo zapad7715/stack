@@ -38,11 +38,11 @@ class AnswersController < ApplicationController
   end
   
   def access_answer
-    redirect_to @answer.question, notice: 'Access denied' if  @answer.user_id != current_user.id
+    render status: :forbidden, notice: 'Access denied' if  @answer.user_id != current_user.id
   end
   
   def access_best_answer
-    redirect_to @answer.question, notice: 'Access denied' if @answer.question.user_id != current_user.id
+    render status: :forbidden, notice: 'Access denied' if @answer.question.user_id != current_user.id
   end
   
   def answer_params

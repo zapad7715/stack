@@ -1,7 +1,8 @@
 class QuestionsController < ApplicationController
   before_action :authenticate_user!, except: [:index, :show]
   before_action :load_question, only: [:show, :edit, :update, :destroy]
-  before_action :access_question, only: [:update, :destroy]
+  before_action :access_question, only: [:destroy]
+  before_action :access_question_js, only: [:update]
   before_action :build_answer, only: :show
   after_action :publish_question, only: [:create]
   
@@ -58,4 +59,9 @@ class QuestionsController < ApplicationController
   def access_question
     redirect_to root_path, notice: 'Access denied' if  @question.user_id != current_user.id
   end
+  
+  def access_question_js
+    render status: :forbidden, notice: 'Access denied' if  @question.user_id != current_user.id
+  end
+  
 end

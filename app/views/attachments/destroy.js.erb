@@ -1,2 +1,3 @@
 $("#question-attachment-id-<%= @attachment.id %>").fadeOut().remove();
 $("#answer-attachment-id-<%= @attachment.id %>").fadeOut().remove();
+$('.notice').html('<%= j flash[:notice]%>')

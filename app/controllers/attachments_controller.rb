@@ -16,12 +16,7 @@ class AttachmentsController < ApplicationController
   end
   
   def access_attachment
-    load_question
-    redirect_to @question, notice: 'Access denied' if  @attachment.attachable.user_id != current_user.id
-  end
-  
-  def load_question
-    @question = @attachment.attachable_type == 'Question' ? @attachment.attachable : @attachment.attachable.question
+    render status: :forbidden, notice: 'Access denied' if  @attachment.attachable.user_id != current_user.id
   end
   
 end
