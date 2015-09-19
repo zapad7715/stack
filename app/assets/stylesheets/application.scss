@@ -1,0 +1,12 @@
+// "bootstrap-sprockets" must be imported before "bootstrap" and "bootstrap/variables"
+@import "bootstrap-sprockets";
+
+html {
+  margin: 30px;
+  padding: 0px;
+}
+.new_comment { display: none; }
+.edit_question { display: none; }
+.edit_answer { display: none; }
+.best-answer { color: green; }
+@import "bootstrap";

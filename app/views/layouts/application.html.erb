@@ -7,28 +7,38 @@
   <%= csrf_meta_tags %>
 </head>
 <body>
-<p class="notice"><%= notice %></p>
-<p class="alert"><%= alert %></p>
-
-<div>
-  <%- if user_signed_in? %>
-    <span id="user_id" data-user-id="<%= current_user.id %>"></span>
-    <ul>
-      <li>
-        <%= link_to('Logout', destroy_user_session_path, method: :delete) %>
-      </li>
-      <li>
-        Welcome, <%= current_user.email %>
-      </li>
-    <% else %>
-        <li>
-          <%= link_to('Login', new_user_session_path) %>
-        </li>
-    <% end %>
-  </ul>
-</div>
-
-<%= yield %>
-
+  <header class="navbar">
+    <div class="navbar-inner">
+      <div class="container">
+        <div>
+          <%- if user_signed_in? %>
+            <ul>
+              <li>
+                <%= link_to('Logout', destroy_user_session_path, method: :delete) %>
+              </li>
+              <li>
+                Welcome, <%= current_user.email %>
+              </li>
+              <span id="user_id" data-user-id="<%= current_user.id %>"></span>
+            <% else %>
+                <li>
+                  <%= link_to('Login', new_user_session_path) %>
+                </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+  
+  <div class="conteiner">
+    <div class="row">
+      <div class="span9">
+        <p class="notice"><%= notice %></p>
+        <p class="alert"><%= alert %></p>
+        <div><%= yield %></div>
+      </div>
+    </div>
+  </div>
 </body>
 </html>
