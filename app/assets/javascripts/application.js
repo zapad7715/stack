@@ -12,6 +12,7 @@
 //
 //= require jquery
 //= require jquery_ujs
+//= require bootstrap
 //= require private_pub
 //= require jquery.remotipart
 //= require cocoon

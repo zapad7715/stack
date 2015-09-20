@@ -1,9 +1,9 @@
 .question id = "question-#{question.id}"
   p = render 'votes/vote', votable: question, type: "question"
   h3 = question.title
-  p = question.body
+  h4 = question.body
 
-  h4 Attachments:
+  h5 Attachments:
   ul
     - question.attachments.each do |a|
       li id="question-attachment-id-#{a.id}"
@@ -13,7 +13,7 @@
           
   - if user_signed_in?
     .comments
-      h4 Comments:
+      h5 Comments:
       - question.comments.each do |c|
         = render partial: 'comments/comment', locals: {comment: c}
       = link_to 'Add comment', '', class: 'create-comment-link', data: {commentable_id: question.id}
@@ -24,8 +24,8 @@
         .comment-errors
 
   - if user_signed_in? && current_user.id == question.user_id
-    p = link_to 'Delete question', @question, method: :delete 
-    p = link_to 'Edit my question', '', class: 'edit-question-link', data: { question_id: @question.id }
+    => link_to 'Delete question', @question, method: :delete 
+    = link_to 'Edit my question', '', class: 'edit-question-link', data: { question_id: @question.id }
     = form_for question, html: { id: "edit-question-#{@question.id}"}, remote: true do |f|
       .question-edit-errors
       = f.label :title, 'Title'

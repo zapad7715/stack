@@ -5,12 +5,12 @@ class CommentsController < ApplicationController
   respond_to :js
 
   def create
-    respond_with(@comment = Comment.create(commentable: @commentable, user_id: current_user.id, comment_body: comment_params[:comment_body]))
+    respond_with(@comment = Comment.create(commentable: @commentable, user_id: current_user.id, comment_body: comment_params[:comment_body]), load_question)
   end
 
   private
 
-  def load_commentable  
+  def load_commentable
     @commentable =  params[:question_id] ? Question.find(params[:question_id]) : Answer.find(params[:answer_id])
   end
   
