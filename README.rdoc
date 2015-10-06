@@ -1,28 +1,44 @@
-== README
+== Учебное приложение для курса обучения от школы Thinknetica http://www.thinknetica.com
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+Приложение разрабатывалось через тестирование: функционал приложения покрыт unit- и acceptance- тестами. 
 
-Things you may want to cover:
+Функционал:
 
-* Ruby version
+* Пользователь может зарегистрироваться на сайте. Есть возможность регистрации через Facebook.
 
-* System dependencies
+* Пользователь может создать вопрос.
 
-* Configuration
+* Пользователь может написать ответ на вопрос.
 
-* Database creation
+* При добавлении вопроса или ответа, они моментально отображаются у других пользователей.
 
-* Database initialization
+* Автор вопроса может выбрать лучший ответ. Лучший ответ отображается первым в списке ответов.
 
-* How to run the test suite
+* Все зарегистрированные пользователи могут голосовать за вопросы и ответы.
 
-* Services (job queues, cache servers, search engines, etc.)
+* Пользователь может комментировать вопросы и ответы.
 
-* Deployment instructions
+* Ответы и вопросы можно удалять и редактировать.
 
-* ...
+* К ответу или вопросу можно прикрепить несколько файлов.
 
 
-Please feel free to use a different markup language if you do not plan to run
-<tt>rake doc:app</tt>.
+Gems:
+
+* Rspec-rails
+
+* Device
+
+* Carrierwave
+
+* Remotipart
+
+* Private_pub
+
+* Omniauth
+
+* Factory_girl_rails
+
+* Bootstrap-sass
+
+
